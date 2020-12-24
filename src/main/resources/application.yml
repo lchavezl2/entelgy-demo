@@ -1,7 +1,0 @@
-server:
-  port: 9006
-  
-application:
-  entelgy:
-    api:
-      path: '/application/entelgy/v1/'
