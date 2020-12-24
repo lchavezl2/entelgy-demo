@@ -1,23 +1,24 @@
 package com.entelgy.demo.business.service.impl;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.entelgy.demo.business.client.typicode.CommentsClient;
 import com.entelgy.demo.business.model.Comment;
 import com.entelgy.demo.business.model.dto.CommentDto;
 import com.entelgy.demo.business.model.response.ResponseGetComments;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DemoServiceImplTest {
 
 	@InjectMocks

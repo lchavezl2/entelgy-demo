@@ -5,14 +5,15 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +27,7 @@ import com.entelgy.demo.business.service.DemoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DemoControllerTest {
 
 	@InjectMocks
@@ -36,49 +37,42 @@ public class DemoControllerTest {
 	DemoService demoService;
 
 	private MockMvc mockMvc;
-	
-	  private final String pathBase = "/application/entelgy/v1";
-	
-	  @Before
-	  public void setUp() {
-	    this.mockMvc = standaloneSetup(this.controller)
-	        .addPlaceholderValue("application.entelgy.api.path", pathBase)
-	        .build();
-	  }
 
-	 //
-	  private static final ObjectMapper mapper;
-	  
-	  static {
-	    mapper = new ObjectMapper();
-	    mapper.findAndRegisterModules();
-	  }
-	  
-	  public static <T> String writeDataToJson(T value) throws JsonProcessingException {
-	    return mapper.writeValueAsString(value);
-	  }
-	  //
-	
+	private final String pathBase = "/application/entelgy/v1";
+
+	@BeforeEach
+	public void setUp() {
+		this.mockMvc = standaloneSetup(this.controller).addPlaceholderValue("application.entelgy.api.path", pathBase)
+				.build();
+	}
+
+	//
+	private static final ObjectMapper mapper;
+
+	static {
+		mapper = new ObjectMapper();
+		mapper.findAndRegisterModules();
+	}
+
+	public static <T> String writeDataToJson(T value) throws JsonProcessingException {
+		return mapper.writeValueAsString(value);
+	}
+	//
 
 	@Test
 	public void whenSourcesId_thenShouldBeSuccessful() throws Exception {
-		Mockito.when(demoService.getComment())
-			.thenReturn(buildResponseGetComments());
+		Mockito.when(demoService.getComment()).thenReturn(buildResponseGetComments());
 
-	    MvcResult mvcResult = mockMvc
-	            .perform(MockMvcRequestBuilders.post(pathBase.concat("/comments"))
-	                .accept(MediaType.APPLICATION_JSON)
-	                .content(writeDataToJson(buildResponseGetComments())))
-	            .andDo(MockMvcResultHandlers.print())
-	            .andReturn();
+		MvcResult mvcResult = mockMvc
+				.perform(MockMvcRequestBuilders.post(pathBase.concat("/comments")).accept(MediaType.APPLICATION_JSON)
+						.content(writeDataToJson(buildResponseGetComments())))
+				.andDo(MockMvcResultHandlers.print()).andReturn();
 
-		Assert.assertEquals(mvcResult.getResponse().getStatus(), HttpStatus.OK.value());
+		Assertions.assertEquals(mvcResult.getResponse().getStatus(), HttpStatus.OK.value());
 	}
 
 	private ResponseGetComments buildResponseGetComments() {
-		return ResponseGetComments.builder()
-				.data(buildListComments())
-				.build();
+		return ResponseGetComments.builder().data(buildListComments()).build();
 	}
 
 	private List<CommentDto> buildListComments() {
@@ -91,11 +85,7 @@ public class DemoControllerTest {
 	}
 
 	private CommentDto buildCommentDto(int postId, int id, String email) {
-		return CommentDto.builder()
-				.id(id)
-				.postId(postId)
-				.email(email)
-				.build();
+		return CommentDto.builder().id(id).postId(postId).email(email).build();
 	}
 
 }
